@@ -1,0 +1,332 @@
+{
+  "info": {
+    "name": "ConversionBird API",
+    "description": "Image format conversion API testing collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get API Documentation",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "Get Supported Formats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/images/formats",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "formats"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - PNG to JPEG",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "jpeg",
+              "type": "text"
+            },
+            {
+              "key": "quality",
+              "value": "90",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - JPEG to WebP",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "webp",
+              "type": "text"
+            },
+            {
+              "key": "quality",
+              "value": "85",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - WebP to PNG",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "png",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - PNG to AVIF",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "avif",
+              "type": "text"
+            },
+            {
+              "key": "quality",
+              "value": "80",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - JPEG to GIF",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "gif",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Convert Image - PNG to BMP",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "bmp",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Test Default Quality (No Quality Parameter)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "jpeg",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Test Error - No File",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "format",
+              "value": "jpeg",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Test Error - No Format",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Test Error - Invalid Quality",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "format",
+              "value": "jpeg",
+              "type": "text"
+            },
+            {
+              "key": "quality",
+              "value": "150",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/images/convert",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "images", "convert"]
+        }
+      }
+    },
+    {
+      "name": "Download Converted Image",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/uploads/output/{{fileName}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["uploads", "output", "{{fileName}}"]
+        }
+      }
+    }
+  ]
+}

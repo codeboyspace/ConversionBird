@@ -1,44 +1,58 @@
 const path = require("path");
-const { pngToJpeg, jpegTopng } = require("../services/ImageServices");
+const { convertImage, detectImageFormat, getSupportedFormats } = require("../services/ImageServices");
 
-//png to jpeg
-exports.convertPngToJpeg = async (req, res) => {
+exports.convertImage = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "Please upload a PNG file" });
+      return res.status(400).json({ 
+        error: "Please upload an image file",
+        supportedFormats: getSupportedFormats()
+      });
+    }
+
+    const { format, quality } = req.body;
+    
+    if (!format) {
+      return res.status(400).json({ 
+        error: "Please specify the output format",
+        supportedFormats: getSupportedFormats()
+      });
+    }
+
+    let qualityValue = 90;
+    if (quality !== undefined) {
+      qualityValue = parseInt(quality);
+      if (isNaN(qualityValue) || qualityValue < 1 || qualityValue > 100) {
+        return res.status(400).json({ 
+          error: "Quality must be a number between 1 and 100"
+        });
+      }
     }
 
     const inputPath = req.file.path;
-    const outputFileName = `${Date.now()}-converted.jpeg`;
-    const outputPath = path.join("uploads/output", outputFileName);
-
-    await pngToJpeg(inputPath, outputPath);
+    
+    const inputFormat = await detectImageFormat(inputPath);
+    
+    const result = await convertImage(inputPath, format, qualityValue);
 
     res.json({
       message: "Conversion successful",
-      downloadUrl: `/uploads/output/${outputFileName}`,
+      inputFormat: inputFormat,
+      outputFormat: format,
+      downloadUrl: result.downloadUrl,
+      fileName: result.outputFileName
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-//jpeg to png
-exports.convertJpegToPng = async (req, res) => {
+exports.getSupportedFormats = async (req, res) => {
   try {
-    if (!req.fil) {
-      return res.status(400).json({ error: "Please upload a Jpeg file" });
-    }
-
-    const inputPath = req.file.path;
-    const outputFileName = `${Date.now()}-converted.png`;
-    const outputPath = path.join("uploads/output", outputFileName);
-
-    await jpegTopng(inputPath, outputPath);
-
+    const formats = getSupportedFormats();
     res.json({
-      message: "Conversion successful",
-      downloadUrl: `/uploads/output/${outputFileName}`,
+      supportedFormats: formats,
+      message: "Available image formats for conversion"
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
