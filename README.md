@@ -1,4 +1,4 @@
-# Postman Testing Guide for ConversionBird API
+#ConversionBird API
 
 ## Base URL
 ```
