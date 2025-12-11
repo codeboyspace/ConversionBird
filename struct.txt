@@ -1,0 +1,17 @@
+.
+├── app1.js
+├── app.js
+├── controllers
+│   └── ImageController.js
+├── ConversionBird_API.postman_collection.json
+├── package.json
+├── package-lock.json
+├── POSTMAN_TESTING_GUIDE.md
+├── README.md
+├── routes
+│   └── ImageRoute.js
+├── services
+│   └── ImageServices.js
+└── struct.txt
+
+4 directories, 11 files

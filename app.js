@@ -1,23 +1,40 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const mongoose = require('mongoose');
 const imageRoutes = require("./routes/ImageRoute");
-const { removeBackground } = require('@imgly/background-removal-node');
-
+const authRoutes = require("./routes/AuthRoute");
+const apiKeyRoutes = require("./routes/ApiKeyRoute");
+const billingRoutes = require("./routes/BillingRoute");
+// const { removeBackground } = require('@imgly/background-removal-node'); // Optional background removal
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 app.use(helmet());
 app.use(cors());
 app.use(morgan("combined"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/keys", apiKeyRoutes);
+app.use("/api/billing", billingRoutes);
 app.use("/api/images", imageRoutes);
 app.use("/uploads/output", express.static("uploads/output"));
+app.use("/files", express.static("uploads/output")); // For download URLs
 
 app.get("/", (req, res) => {
   res.json({

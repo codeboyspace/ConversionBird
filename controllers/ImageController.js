@@ -49,12 +49,17 @@ exports.convertImage = async (req, res) => {
 
     const result = await convertImage(inputPath, format, qualityValue, resolvedCompression);
 
+    // Get file sizes
+    const fs = require('fs');
+    const originalSize = fs.statSync(inputPath).size;
+    const convertedSize = fs.existsSync(result.outputPath) ? fs.statSync(result.outputPath).size : 0;
+
     res.json({
-      message: "Conversion successful",
-      inputFormat: inputFormat,
-      outputFormat: format,
       downloadUrl: result.downloadUrl,
-      fileName: result.outputFileName
+      formatFrom: inputFormat,
+      formatTo: format,
+      originalSize,
+      convertedSize
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -102,11 +107,18 @@ exports.processImage = async (req, res) => {
     };
 
     const result = await processImage(req.file.path, options);
+
+    // Get file sizes
+    const fs = require('fs');
+    const originalSize = fs.statSync(req.file.path).size;
+    const convertedSize = fs.existsSync(result.outputPath) ? fs.statSync(result.outputPath).size : 0;
+
     res.json({
-      message: "Processing successful",
       downloadUrl: result.downloadUrl,
-      fileName: result.outputFileName,
-      format: result.format
+      formatFrom: await require('../services/ImageServices').detectImageFormat(req.file.path),
+      formatTo: result.format,
+      originalSize,
+      convertedSize
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
