@@ -2,6 +2,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const getPlanLimit = (plan) => {
+  const limits = { free: 100, pro: 1000, business: 10000 };
+  return limits[plan] || 100;
+};
+
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -37,7 +42,12 @@ exports.register = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        plan: user.plan
+        name: user.email.split('@')[0],
+        plan: user.plan,
+        usage: {
+          conversions: 0,
+          limit: getPlanLimit(user.plan)
+        }
       }
     });
   } catch (error) {
@@ -72,8 +82,12 @@ exports.login = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
+        name: user.email.split('@')[0],
         plan: user.plan,
-        conversionsThisMonth: user.conversionsThisMonth
+        usage: {
+          conversions: user.conversionsThisMonth || 0,
+          limit: getPlanLimit(user.plan)
+        }
       }
     });
   } catch (error) {
@@ -98,8 +112,12 @@ exports.getMe = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
+        name: user.email.split('@')[0],
         plan: user.plan,
-        conversionsThisMonth: user.conversionsThisMonth,
+        usage: {
+          conversions: user.conversionsThisMonth || 0,
+          limit: getPlanLimit(user.plan)
+        },
         createdAt: user.createdAt
       }
     });

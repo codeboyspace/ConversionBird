@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { convertImage, getSupportedFormats, processImage } = require("../controllers/ImageController");
-const { authenticateApiKey } = require("../middleware/apiKeyAuth");
+const { authenticateApiKeyOrToken } = require("../middleware/apiKeyAuth");
 const { enforcePlanLimits } = require("../middleware/enforcePlan");
 const { log, incrementUserConversions } = require("../services/UsageService");
 const fs = require("fs");
@@ -10,15 +10,15 @@ const router = express.Router();
 
 const upload = multer({ dest: "uploads/input/" });
 
-// Middleware stack for protected routes
-const conversionMiddleware = [authenticateApiKey, enforcePlanLimits];
+// Middleware stack for protected routes — accept either API key or user token
+const conversionMiddleware = [authenticateApiKeyOrToken, enforcePlanLimits];
 
 // Wrapper to add usage logging
 const withUsageLogging = (controller) => async (req, res) => {
   const originalJson = res.json;
   res.json = function(data) {
     // Log usage after successful conversion
-    if (data.downloadUrl && req.user && req.apiKey) {
+    if (data.downloadUrl && req.user) {
       try {
         const inputPath = req.file.path;
         const outputPath = data.downloadUrl.replace('/uploads/output/', 'uploads/output/');
@@ -27,7 +27,7 @@ const withUsageLogging = (controller) => async (req, res) => {
 
         log({
           userId: req.user._id,
-          apiKeyId: req.apiKey._id,
+          apiKeyId: req.apiKey ? req.apiKey._id : null,
           formatFrom: data.formatFrom || data.inputFormat,
           formatTo: data.formatTo || data.outputFormat,
           bytesIn,
